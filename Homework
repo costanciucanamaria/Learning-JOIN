@@ -1,0 +1,42 @@
+--Exercise 01: Retrieve All Orders for Individual Customers
+--Objective: Retrieve all orders and their corresponding customer names, specifically for individuals.
+--Retrieve only the rows where the PersonType column in the Person.Person table has the value 'IN' (Individual consumers).
+--Include the following columns in your results:
+--FirstName, MiddleName, LastName from the Person.Person table.
+--OrderDate, TotalDue from the Sales.SalesOrderHeader table.
+
+SELECT  p.FirstName, p.MiddleName, p.LastName, p.PersonType, oh.OrderDate, oh.TotalDue
+FROM Person.Person p
+JOIN Sales.Customer c ON p.BusinessEntityID = c.PersonID
+JOIN Sales.SalesOrderHeader oh ON oh.CustomerID = c.CustomerID
+ORDER BY p.LastName ASC, oh.TotalDue DESC
+
+--Exercise 02: Retrieve the product names and corresponding categories
+--Objective: Retrieve the product names and corresponding categories from the Products table and the ProductCategory table.
+--Include the following columns in your results:
+--Name (use alias ProductName) from the Production.Product table.
+--Name (use alias CategoryName) from the Production.ProductCategory table.
+
+SELECT 
+p.Name AS ProductName,
+pc.Name AS CategoryName
+FROM Production.Product p 
+JOIN Production.ProductSubcategory psc ON p.ProductSubcategoryID = psc.ProductSubcategoryID
+JOIN Production.ProductCategory pc ON pc.ProductCategoryID = psc.ProductCategoryID
+ORDER BY p.Name
+
+--Exercise 03: Retrieve a specific product
+--Objective: Retrieve a specific product using its location
+--Retrieve the product name for the product stored in Subassembly location, Shelf W and Bin 9.
+--Include the following columns in your results:
+--Name (use alias ProductName) from the Production.Product table.
+--Quantity from the Production.ProductInventory table.
+
+SELECT 
+p.Name AS ProductName,
+pi.Quantity
+FROM Production.Product p
+JOIN Production.ProductInventory pi ON p.ProductID = pi.ProductID
+JOIN Production.Location l ON l.LocationID = pi.LocationID
+WHERE pi.Shelf = 'W'
+AND pi.Bin = 9
